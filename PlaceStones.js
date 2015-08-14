@@ -35,7 +35,7 @@
 
 	*/
 
-	var attackRadius = 50;
+	var ATTACK_RADIUS = 50;
 
 	Raphael.fn.stone = function (x, y, r, hue) {
 		hue = hue || 0;
@@ -57,7 +57,7 @@
 		hue = hue || 0;
 		var createdSet = this.set(
 			// Visualization of attack radius.
-			this.ellipse(x, y, attackRadius, attackRadius)
+			this.ellipse(x, y, ATTACK_RADIUS, ATTACK_RADIUS)
 				.attr({	stroke: "hsb(" + hue + ", 1, .75)",
 						fill: "r(.5,.5)hsb(" + hue + ", .8, .75)-hsb(" + hue + ", .7, .75)",
 						opacity: 0}),
@@ -75,9 +75,9 @@
 	var shadows = [];
 
 	window.onload = function () {
-		var cellSize = attackRadius;
+		var cellSize = ATTACK_RADIUS;
 		var halfCellSize = cellSize / 2;
-		var stoneRadius = cellSize * 0.45;
+		var STONE_RADIUS = cellSize * 0.45;
 		var numCells = 13;
 
 		var boardWidth = cellSize * numCells, boardHeight = cellSize * numCells;
@@ -152,13 +152,13 @@
 					R.stoneShadow(x, y, hue);
 
 				var newStone =
-					R.stone(x, y, stoneRadius, hue);
+					R.stone(x, y, STONE_RADIUS, hue);
 
 				var collide = false;
 				var stoneIndex = 0;
 
 				while(stoneIndex < stones.length){
-					if(stonesIntersect(newStone, stones[stoneIndex]))
+					if(circlesIntersect(newStone, stones[stoneIndex]))
 					{
 						collide = true;
 						break;
@@ -181,16 +181,12 @@
 		};
 	};
 
-	var stonesIntersect = function(stone1, stone2)
+	// Check if two circles OF THE SAME RADIUS
+	// intersect.  Optimized with a cheap check
+	// first before doing an exact check.
+	var circlesIntersect = function(stone1, stone2)
 	{
 		try{
-			//alert("stonesIntersect" +
-			//	"\nstone1.x: " + stone1.x +
-			//	"\nstone1.y: " + stone1.y +
-			//	"\nstone1.r: " + stone1.r +
-			//	"\nstone2.x: " + stone2.x +
-			//	"\nstone2.y: " + stone2.y +
-			//	"\nstone2.r: " + stone2.r);
 
 			var intersects = false;
 
@@ -198,12 +194,10 @@
 			var sideLength = stone1.r * 2;
 
 			// Do a cheap bounding box intersection check.
-			var bSquaresIntersect = squaresIntersect(stone1.x, stone1.y, sideLength, stone2.x, stone2.y, sideLength);
-			if(bSquaresIntersect)
+			if(cheapCirclesMayIntersect(stone1, stone2))
 			{
-				//alert("stonesIntersect 2");
 				// Only do a more expensive check if the circles intersect when the bounding boxes intersect.
-				intersects = circlesIntersect(stone1.x, stone1.y, stone1.r, stone2.x, stone2.y, stone2.r);
+				intersects = exactCirclesIntersect(stone1, stone2);
 			}
 			return intersects;
 		}catch(e){
@@ -211,19 +205,21 @@
 		}
 	}
 
-	var squaresIntersect = function(x1, y1, side1, x2, y2, side2)
+	var cheapCirclesMayIntersect = function(circle1, circle2)
 	{
 		try{
-			//alert("squaresIntersect");
+			//alert("cheapCirclesMayIntersect");
+			diameter1 = circle1.r * 2;
+			diameter2 = circle2.r + 2;
 
 			//top1 <= bottom2
-			var b1 = y1 <= y2 + side2;
+			var b1 = circle1.y <= circle2.y + diameter2;
 			//bottom1 >= top2
-			var b2 = y1 + side1 >= y2;
+			var b2 = circle1.y + diameter1 >= circle2.y;
 			//left1 <= right2
-			var b3 = x1 <= x2 + side2;
+			var b3 = circle1.x <= circle2.x + diameter2;
 			//right1 >= left2
-			var b4 = x1 + side1 >= x2;
+			var b4 = circle1.x + diameter1 >= circle2.x;
 
 			return b1 && b2 && b3 && b4;
 
@@ -232,11 +228,11 @@
 		}
 	};
 
-	var circlesIntersect = function(x1, y1, r1, x2, y2, r2)
+	var exactCirclesIntersect = function(circle1, circle2)
 	{
 		try{
-			var dist = Math.sqrt((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1));
-			return (dist <= r1 + r2);
+			var dist = Math.sqrt((circle2.x - circle1.x)*(circle2.x - circle1.x) + (circle2.y - circle1.y)*(circle2.y - circle1.y));
+			return (dist <= circle1.r + circle2.r);
 		} catch(e) {
 			alert(e.toString());
 		}
