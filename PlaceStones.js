@@ -7,6 +7,11 @@
 		Shadows are drawn under each stone to indicate the attack/link radius
 
 	TODO:
+		General
+			Look at latest version of Raphael, my version is OLD!
+			Use a package manager for Raphael and other dependencies
+			Organize SVG elements into svg groups
+			Manually control SVG instead of using Raphael?
 		Game Logic
 			track placed stones
 			freedoms
