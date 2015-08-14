@@ -1,0 +1,26 @@
+body {
+    background: #333;
+    color: #fff;
+    font: 300 100.1% "Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif;
+}
+#holder {
+	
+    height: 800px;
+    left: 20px;
+	top: 20px;
+    width: 800px;
+    margin: 0px 0 0 0px;
+    position: absolute;
+    background: #111;
+	color: #eee;
+}
+#copy {
+    bottom: 0;
+    font: 300 .7em "Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif;
+    position: absolute;
+    right: 1em;
+    text-align: right;
+}
+#copy a {
+    color: #fff;
+}
