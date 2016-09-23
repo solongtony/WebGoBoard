@@ -194,7 +194,7 @@
 			var sideLength = stone1.r * 2;
 
 			// Do a cheap bounding box intersection check.
-			var circlesMayIntersect = ;
+			var circlesMayIntersect = false;
 			if(cheapCirclesMayIntersect(stone1, stone2))
 			{
 				// Only do a more expensive check if the circles intersect when the bounding boxes intersect.
