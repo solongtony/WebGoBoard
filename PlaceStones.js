@@ -35,7 +35,9 @@
 
 	*/
 
-	var ATTACK_RADIUS = 50;
+  var CELL_SIZE = 50;
+	var ATTACK_RADIUS = 25;
+	var STONE_RADIUS = CELL_SIZE * 0.45;
 
 	Raphael.fn.stone = function (x, y, r, hue) {
 		hue = hue || 0;
@@ -75,12 +77,13 @@
 	var shadows = [];
 
 	window.onload = function () {
-		var cellSize = ATTACK_RADIUS;
-		var halfCellSize = cellSize / 2;
-		var STONE_RADIUS = cellSize * 0.45;
+
+		// NOT RIGHT
+		var halfCellSize = CELL_SIZE / 2;
+
 		var numCells = 13;
 
-		var boardWidth = cellSize * numCells, boardHeight = cellSize * numCells;
+		var boardWidth = CELL_SIZE * numCells, boardHeight = CELL_SIZE * numCells;
 		var R = Raphael("holder", boardWidth, boardHeight);
 
 		//alert("a");
@@ -97,11 +100,20 @@
 		var gridLeft = halfCellSize;
 		var gridRight = boardWidth - halfCellSize;
 
+		var turn = 0;
+
+		var redHue = 1.0;
+		var blueHue = 0.6;
+		var greenHue = 0.3;
+		var purpleHue = 0.75;
+		var orangeHue = 0.1;
+		var yellowHue = 0.2;
+
 		/*
 		var = x, y;
 		// Make a grid of stones.
-		for(x = cellSize; x < boardWidth; x += cellSize){
-			for(y = cellSize; y < boardHeight; y += cellSize){
+		for(x = CELL_SIZE; x < boardWidth; x += CELL_SIZE){
+			for(y = CELL_SIZE; y < boardHeight; y += CELL_SIZE){
 				R.stone(x, y, radius, Math.random());
 			}
 		}
@@ -110,20 +122,16 @@
 		var drawGrid = function()
 		{
 			var x, y;
-			for(x = gridLeft; x <= gridRight; x += cellSize){
+			for(x = gridLeft; x <= gridRight; x += CELL_SIZE){
 				R.path("M"+x+" "+gridTop+"L"+x+" "+gridBottom).attr({stroke: "#eee"});
 			}
 
-			for(y = gridTop; y <= gridBottom; y += cellSize){
+			for(y = gridTop; y <= gridBottom; y += CELL_SIZE){
 				R.path("M"+gridLeft+" "+y+"L"+gridRight+" "+y).attr({stroke: "#eee"});
 			}
 		}
 
 		drawGrid();
-
-		//alert("3");
-
-		var turn = 0;
 
 		holder.onclick = function(mouseEvent){
 			// in Chrome, correct mouse event co-ordinates can be found in:
@@ -134,12 +142,7 @@
 			x = mouseEvent.offsetX;
 			y = mouseEvent.offsetY;
 
-			var redHue = 1.0;
-			var blueHue = 0.6;
-			var greenHue = 0.3;
-			var purpleHue = 0.75;
-			var orangeHue = 0.1;
-			var yellowHue = 0.2;
+
 
 			var hue;
 
