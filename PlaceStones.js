@@ -1,39 +1,4 @@
 (function(){
-	/*
-	Features:
-		Draws a grid for the board
-		Click to place a stone
-		Next stone color alternates each turn
-		Shadows are drawn under each stone to indicate the attack/link radius
-
-	TODO:
-		General
-			Look at latest version of Raphael, my version is OLD!
-			Use a package manager for Raphael and other dependencies
-			Organize SVG elements into svg groups
-			Manually control SVG instead of using Raphael?
-		Game Logic
-			track placed stones
-			freedoms
-			attacks
-			groups / linking
-		Additional Graphics
-			show ghost stone. stone disapears in case of collision.
-			show different shade of ghost stone in case of collision while button is held down.
-			board background
-			mark or visually indicate attacked stones
-			use a different shadow affect to show linked stone groups
-			create other board graphics as an alternative to full grid:
-				dots on grid intersections
-				dots for "major" intersections
-		Display Game stats in additional controls
-
-	Notes:
-
-		Raphael has a built in bounding box (element.getBbox() ), but it is based on x, y, height, and width.
-		I need top, bottom, left, and right for intersection testing, so it isn't ideal.  Have to do extra computations.
-
-	*/
 
 	var ATTACK_RADIUS = 50;
 
@@ -184,6 +149,9 @@
 	// Check if two circles OF THE SAME RADIUS
 	// intersect.  Optimized with a cheap check
 	// first before doing an exact check.
+	// Note on bounding boxes:
+	// Raphael has a built in bounding box (element.getBbox() ), but it is based on x, y, height, and width.
+	// I need top, bottom, left, and right for intersection testing, so it isn't ideal.  Have to do extra computations.
 	var circlesIntersect = function(stone1, stone2)
 	{
 		try{
